@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from . import models
+from widget_tweaks.templatetags import widget_tweaks
+
+
 
 
 class CustomerUserForm(forms.ModelForm):
@@ -11,7 +14,13 @@ class CustomerUserForm(forms.ModelForm):
         'password': forms.PasswordInput(),
         
         }
-        
+    def save(self, commit=True):
+        print("saving")
+        user = super().save(commit=False)
+        # user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
 
 # from django import forms
@@ -52,6 +61,9 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model=models.Customer
         fields=['address','mobile','profile_pic']
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'title': 'Choose Profile Pic'}),
+        }
 
 class ProductForm(forms.ModelForm):
     class Meta:

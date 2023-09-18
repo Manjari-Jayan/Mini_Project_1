@@ -30,7 +30,9 @@
 }
 
 .box input[type="text"],
-.box input[type="password"] {
+.box input[type="password"],
+.box input[type="file"]
+ {
     border: 0;
     background: none;
     display: block;
@@ -52,7 +54,9 @@
 }
 
 .box input[type="text"]:focus,
-.box input[type="password"]:focus {
+.box input[type="password"]:focus,
+.box input[type="file"]:focus,
+ {
     width: 300px;
     border-color: #d3d3d3
 }
@@ -155,14 +159,14 @@ a.socialIcon:hover,
                   {% csrf_token %}
                     <h1>Customer Sign Up</h1>
                     
-                      {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
-                        {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
-                          {% render_field userForm.username class="form-control" placeholder="Username" %}
-                            {% render_field userForm.password class="form-control" placeholder="Password" %}
-                            
-                              {% render_field customerForm.address class="form-control" placeholder="Address" %}
-                                {% render_field customerForm.mobile class="form-control" placeholder="Contact" %}
-                                  {% render_field customerForm.profile_pic class="form-control" placeholder="Profile pic" %}
+                      {% render_field userForm.first_name class="form-control" placeholder="First Name" id="id_first_name" %}
+                        {% render_field userForm.last_name class="form-control" placeholder="Last Name" id="id_last_name" %}
+                          {% render_field userForm.username class="form-control" placeholder="Username" id="id_username" %}
+                            {% render_field userForm.password class="form-control" placeholder="Password" id="id_password" %}
+                             {% render_field userForm.password class="form-control" placeholder="ConfirmPassword" id="id_confirm_password" %}
+                              {% render_field customerForm.address class="form-control" placeholder="Address" id="id_address" %}
+                                {% render_field customerForm.mobile class="form-control" placeholder="Contact" id="id_mobile" %}
+                                  {% render_field customerForm.profile_pic class="form-control" title="Profile pic" id="id_profile_pic" %}
                   
                      <input type="submit" name="" value="Create">
 
@@ -182,3 +186,73 @@ a.socialIcon:hover,
 This customersignup
 -->
 </html>
+<script>
+    $(document).ready(function () {
+        function isEmptyOrWhitespace(str) {
+            return /^\s*$/.test(str);
+        }
+    
+        $('form').submit(function (event) {
+            var firstName = $('#id_first_name').val();
+            var lastName = $('#id_last_name').val();
+            var username = $('#id_username').val();
+            var password = $('#id_password').val();
+            var confirmPassword = $('#id_confirm_password').val();
+            var address = $('#id_address').val();
+            var mobile = $('#id_mobile').val();
+            var profilePic = $('#id_profile_pic').val();
+    
+            if (isEmptyOrWhitespace(firstName)) {
+                alert('First name cannot be empty.');
+                event.preventDefault();
+            }
+    
+            if (isEmptyOrWhitespace(lastName)) {
+                alert('Last name cannot be empty.');
+                event.preventDefault();
+            }
+    
+            if (isEmptyOrWhitespace(username)) {
+                alert('Username cannot be empty.');
+                event.preventDefault();
+            }
+    
+            if (isEmptyOrWhitespace(password)) {
+                alert('Password cannot be empty.');
+                event.preventDefault();
+            } else if (password.length < 8) {
+                alert('Password must be at least 8 characters long.');
+                event.preventDefault();
+            } else if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=]).*$/.test(password)) {
+                alert('Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&+=).');
+                event.preventDefault();
+            }
+    
+            if (password !== confirmPassword) {
+                alert('Password and confirm password do not match.');
+                event.preventDefault();
+            }
+            if (isEmptyOrWhitespace(mobile)) {
+                alert('Mobile number cannot be empty.');
+                event.preventDefault();
+            } else if (!/^[0-9]+$/.test(mobile)) {
+                alert('Mobile number must contain only digits.');
+                event.preventDefault();
+            }
+            var profilePicFile = $('#id_profile_pic')[0].files[0];
+        if (!profilePicFile) {
+            alert('Please upload a profile picture.');
+            event.preventDefault();
+        } else {
+            var allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+            var extension = profilePicFile.name.substring(profilePicFile.name.lastIndexOf('.')).toLowerCase();
+            if (allowedExtensions.indexOf(extension) === -1) {
+                alert('Invalid file format. Profile picture must be in JPG, JPEG, PNG, or GIF format.');
+                event.preventDefault();
+            }
+        }
+        });
+    });
+    
+
+</script>

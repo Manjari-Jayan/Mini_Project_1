@@ -53,7 +53,7 @@
     border-color: #d3d3d3
 }
 
-.box input[type="submit"] {
+.box button[type="submit"] {
     border: 0;
     background: none;
     display: block;
@@ -68,7 +68,7 @@
     cursor: pointer
 }
 
-.box input[type="submit"]:hover {
+.box button[type="submit"]:hover {
     background: #2ecc71
 }
 
@@ -153,7 +153,7 @@ a.socialIcon:hover,
                     
                                {% render_field form.username class="form-control" placeholder="Username" autocomplete="off" %}
                                {% render_field form.password class="form-control" placeholder="Password" %}
-                     <input type="submit" name="" value="Login" >
+                     <button type="submit" name="">Login</button>
 
                 </form>
             </div>

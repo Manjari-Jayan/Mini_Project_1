@@ -19,7 +19,8 @@ def home_view(request):
         return HttpResponseRedirect('afterlogin')
     return render(request,'ecom/index.html',{'products':products,'product_count_in_cart':product_count_in_cart})
     
-
+def customer_login_view(request):
+    return render(request,"ecom/customerlogin.html")
 
 #for showing login button for admin(by sumit)
 def adminclick_view(request):
@@ -29,13 +30,16 @@ def adminclick_view(request):
 
 
 def customer_signup_view(request):
+    print("calling view")
     userForm=forms.CustomerUserForm()
     customerForm=forms.CustomerForm()
     mydict={'userForm':userForm,'customerForm':customerForm}
     if request.method=='POST':
         userForm=forms.CustomerUserForm(request.POST)
-        customerForm=forms.CustomerForm(request.POST,request.FILES)
-        if userForm.is_valid() and customerForm.is_valid():
+        customerForm=forms.CustomerForm(request.POST) 
+        print(customerForm.is_valid())
+        if userForm.is_valid():
+            print('valid forms')
             user=userForm.save()
             user.set_password(user.password)
             user.save()
@@ -44,7 +48,10 @@ def customer_signup_view(request):
             customer.save()
             my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
             my_customer_group[0].user_set.add(user)
+        print("psot")
         return HttpResponseRedirect('customerlogin')
+        
+    
     return render(request,'ecom/customersignup.html',context=mydict)
 
 #for checking user iscustomer
